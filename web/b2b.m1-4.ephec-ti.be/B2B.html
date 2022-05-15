@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B2B</title>
+</head>
+<body>
+    <p>hello world b2b</p>
+    <?php
+    $host = 'mysql';
+    $user = getenv('MYSQL_USER');
+    $pass = getenv('MYSQL_PASSWORD');
+    $db = getenv('MYSQL_DATABASE');
+    $connection = new mysqli($host, $user, $pass, $db);
+    $retour = $conn->query('select phrase from dba.test');
+    echo "<p>" . $retour["phrase"] . "</p>";
+    $connection->close();
+    ?>
+</body>
+</html>
