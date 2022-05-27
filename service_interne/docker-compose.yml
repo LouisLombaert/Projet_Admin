@@ -1,0 +1,138 @@
+version: "3.9"  # optional since v1.27.0
+services:
+
+  dns:
+    build: 
+      context: ./dns
+      dockerfile: Dockerfile
+    ports: 
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./dns/named.conf.local:/etc/bind/named.cond.local
+      - ./dns/db.local.ephec-ti:/etc/bind/db.local.ephec-ti
+    container_name: dns_soa
+
+  resolver:
+    build: 
+      context: ./dns_resolv
+      dockerfile: Dockerfile
+    volumes:
+      - ./dns_resolv/named.conf:/etc/bind/named.conf
+    container_name: dns_resolv
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web/intranet.conf:/etc/apache2/sites-available/intranet.conf
+      - ./web/index.html:/var/www/html/index.html
+    container_name: web
+
+
+
+
+  direction:
+    build:
+      context: ./user/direction
+      dockerfile: Dockerfile
+    networks:
+      direction_network:
+        ipv4_address: 192.168.1.2
+    container_name: direction
+
+  commerciaux:
+    build:
+      context: ./user/commerciaux
+      dockerfile: Dockerfile
+    networks:
+      network_commerciaux:
+        ipv4_address: 192.168.1.34
+    container_name: commerciaux
+
+  compta:
+    build:
+      context: ./user/compta
+      dockerfile: Dockerfile
+    networks:
+      network_compta:
+        ipv4_address: 192.168.1.66
+    container_name: compta
+
+  atelier:
+    build:
+      context: ./user/atelier
+      dockerfile: Dockerfile
+    networks:
+      network_atelier:
+        ipv4_address: 192.168.1.130
+    container_name: atelier
+    
+  hangar:
+    build:
+      context: ./user/hangar
+      dockerfile: Dockerfile
+    networks:
+      network_hangar:
+        ipv4_address: 192.168.1.98
+    container_name: hangar
+
+  secretariat:
+    build:
+      context: ./user/secrétaire
+      dockerfile: Dockerfile
+    networks:
+      network_secretaire:
+        ipv4_address: 192.168.1.162
+    container_name: secretariat
+
+networks:
+  local_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.1
+
+  direction_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/27
+          gateway: 192.168.1.1
+
+  network_commerciaux:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.32/27
+          gateway: 192.168.1.33
+
+  network_compta:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.64/27
+          gateway: 192.168.1.65
+  
+  network_atelier:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.128/27
+          gateway: 192.168.1.129
+  network_hangar:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.96/27
+          gateway: 192.168.1.97
+  network_secretaire:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.160/27
+          gateway: 192.168.1.161
