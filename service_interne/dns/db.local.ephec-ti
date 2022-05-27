@@ -1,0 +1,15 @@
+$ORIGIN local.m1-4.ephec-ti.be
+$TTL    604800
+@       IN      SOA     ns.local.m1-4.ephec-ti.be. l.lombaert.students.ephec.be. (
+                              1         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns.local.m1-4.ephec-ti.be.
+ns      IN      A       176.96.231.205
+www     IN      A       176.96.231.205
+web     IN      CNAME   www
+intranet  IN    CNAME   www
+
